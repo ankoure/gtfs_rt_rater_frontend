@@ -1,0 +1,73 @@
+{
+  "nav": {
+    "title": "GTFS-RT Rater"
+  },
+  "landing": {
+    "title": "GTFS-RT Feed Quality",
+    "subtitle": "Automated quality metrics for real-time public transit data feeds, sourced from the MobilityDatabase.",
+    "stats": {
+      "feedsMonitored": "Feeds monitored",
+      "lastUpdated": "Last updated",
+      "avgScore": "Avg. score"
+    },
+    "cta": "View all feeds →"
+  },
+  "feeds": {
+    "title": "All Feeds",
+    "subtitle": "Qualitative metrics for real-time transit data feeds, sourced from the MobilityDatabase.",
+    "generatedAt": "Updated {date}",
+    "back": "← Home",
+    "table": {
+      "feedId": "Feed ID",
+      "grade": "Overall Grade",
+      "score": "Score",
+      "uptime": "Uptime"
+    },
+    "viewDetails": "View details"
+  },
+  "feedDetail": {
+    "back": "← All feeds",
+    "lastUpdated": "Last updated",
+    "windowMinutes": "Analysis window",
+    "windowValue": "{minutes} minutes",
+    "overallScore": "Overall Score",
+    "entityStats": {
+      "title": "Entity Statistics",
+      "avgVehicles": "Avg. Vehicles",
+      "uptime": "Uptime"
+    },
+    "fieldsBreakdown": {
+      "title": "Field Support Breakdown",
+      "description": "Average presence of each optional field across the analysis window."
+    }
+  },
+  "fields": {
+    "bearing": "Bearing",
+    "speed": "Speed",
+    "occupancy": "Occupancy Status",
+    "stop_sequence": "Stop Sequence",
+    "multi_carriage": "Multi-Carriage Details",
+    "odometer": "Odometer",
+    "stop_id": "Stop ID",
+    "current_status": "Current Status",
+    "timestamp": "Timestamp",
+    "congestion_level": "Congestion Level",
+    "occupancy_percentage": "Occupancy Percentage"
+  },
+  "fieldColumns": {
+    "field": "Field",
+    "avgSupport": "Avg. Support",
+    "stddev": "Std. Dev.",
+    "grade": "Grade"
+  },
+  "grades": {
+    "label": {
+      "A+": "Excellent",
+      "A": "Excellent",
+      "B": "Good",
+      "C": "Fair",
+      "D": "Poor",
+      "F": "Failing"
+    }
+  }
+}
