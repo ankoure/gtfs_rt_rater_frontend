@@ -16,7 +16,7 @@
       "autogen_policy": false,
       "iam_policy_file": "policy.json",
       "environment_variables": {
-        "FRONTEND_HOST": "gtfs-rt-rater.example.com",
+        "FRONTEND_HOST": "rater.andrewkoure.com",
         "GTFS_RT_RATER_BUCKET": "gtfs-rt-feeds",
         "BACKEND_SOURCE": "aws"
       }
