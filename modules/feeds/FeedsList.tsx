@@ -3,10 +3,23 @@ import Link from "next/link";
 import { getFeeds } from "../../common/api/feeds";
 import GradeBadge from "../../common/components/GradeBadge";
 
+function scoreHeatClass(score: number): string {
+  if (score >= 0.8) return "bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-400";
+  if (score >= 0.6) return "bg-yellow-50 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400";
+  if (score >= 0.4) return "bg-orange-50 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400";
+  return "bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-400";
+}
+
+function uptimeDotClass(uptime: number): string {
+  if (uptime >= 0.95) return "bg-green-500";
+  if (uptime >= 0.8) return "bg-amber-400";
+  return "bg-red-500";
+}
+
 export default async function FeedsList() {
   const locale = await getLocale();
   const t = await getTranslations("feeds");
-  const { generated_at, feeds } = getFeeds();
+  const { generated_at, feeds } = await getFeeds();
 
   const generatedDate = new Date(generated_at).toLocaleString(locale, {
     dateStyle: "medium",
@@ -23,6 +36,9 @@ export default async function FeedsList() {
           >
             {t("back")}
           </Link>
+          <p className="text-xs font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1">
+            Feed Quality Report
+          </p>
           <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
             {t("title")}
           </h1>
@@ -61,11 +77,16 @@ export default async function FeedsList() {
                   <td className="px-5 py-4 text-center">
                     <GradeBadge grade={feed.overall_grade} />
                   </td>
-                  <td className="px-5 py-4 text-right font-mono text-zinc-600 dark:text-zinc-400">
+                  <td className={`px-5 py-4 text-right font-mono font-semibold ${scoreHeatClass(feed.overall_score)}`}>
                     {(feed.overall_score * 100).toFixed(0)}%
                   </td>
-                  <td className="px-5 py-4 text-right font-mono text-zinc-600 dark:text-zinc-400">
-                    {(feed.uptime_percent * 100).toFixed(0)}%
+                  <td className="px-5 py-4 text-right">
+                    <span className="inline-flex items-center gap-1.5 font-mono text-zinc-600 dark:text-zinc-400">
+                      <span
+                        className={`inline-block w-2 h-2 rounded-full flex-shrink-0 ${uptimeDotClass(feed.uptime_percent)}`}
+                      />
+                      {(feed.uptime_percent * 100).toFixed(0)}%
+                    </span>
                   </td>
                   <td className="px-5 py-4 text-right">
                     <Link

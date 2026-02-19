@@ -6,13 +6,18 @@
   "lambda_timeout": 30,
   "lambda_memory_size": 512,
   "stages": {
+    "local": {
+      "environment_variables": {
+        "GTFS_RT_RATER_BUCKET": "gtfs-rt-feeds"
+      }
+    },
     "production": {
       "api_gateway_stage": "production",
       "autogen_policy": false,
       "iam_policy_file": "policy.json",
       "environment_variables": {
         "FRONTEND_HOST": "gtfs-rt-rater.example.com",
-        "GTFS_RT_RATER_BUCKET": "gtfs-rt-rater",
+        "GTFS_RT_RATER_BUCKET": "gtfs-rt-feeds",
         "BACKEND_SOURCE": "aws"
       }
     }

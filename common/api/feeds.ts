@@ -1,12 +1,19 @@
 import type { FeedDetail, FeedsList } from "../types/feeds";
 
-import feedsData from "../../examples/aggregates/feeds.json";
-import feedDetailData from "../../examples/aggregates/feeds/mdb-2335.json";
+const API_BASE_URL = process.env.API_BASE_URL ?? "http://localhost:5000";
 
-export function getFeeds(): FeedsList {
-  return feedsData as FeedsList;
+export async function getFeeds(): Promise<FeedsList> {
+  const res = await fetch(`${API_BASE_URL}/api/feeds`, {
+    next: { revalidate: 900 },
+  });
+  if (!res.ok) throw new Error(`Failed to fetch feeds: ${res.status}`);
+  return res.json();
 }
 
-export function getFeedDetail(_feedId: string): FeedDetail {
-  return feedDetailData as FeedDetail;
+export async function getFeedDetail(feedId: string): Promise<FeedDetail> {
+  const res = await fetch(`${API_BASE_URL}/api/feeds/${feedId}`, {
+    next: { revalidate: 900 },
+  });
+  if (!res.ok) throw new Error(`Failed to fetch feed ${feedId}: ${res.status}`);
+  return res.json();
 }

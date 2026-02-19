@@ -3,6 +3,14 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Grade tier semantic colors */
+  --grade-excellent: #22c55e;
+  --grade-good: #3b82f6;
+  --grade-fair: #f59e0b;
+  --grade-poor: #f97316;
+  --grade-failing: #ef4444;
+  --grade-unknown: #71717a;
 }
 
 @theme inline {

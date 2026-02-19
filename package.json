@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "concurrently npm:start-python npm:start-react",
     "build": "next build",
     "start": "next start",
+    "start-python": "cd server && GTFS_RT_RATER_BUCKET=gtfs-rt-feeds uv run chalice local --port=5000",
+    "start-react": "next dev",
     "lint": "eslint"
   },
   "dependencies": {
@@ -19,8 +21,9 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.1.6",
+    "concurrently": "^9.2.1",
+    "eslint": "^10.0.0",
+    "eslint-config-next": "^0.2.4",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

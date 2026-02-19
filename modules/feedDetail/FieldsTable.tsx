@@ -12,6 +12,16 @@ function formatFieldKey(key: string): string {
   return key.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
+function supportHeatClass(support: number): string {
+  if (support >= 0.9)
+    return "bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-400";
+  if (support >= 0.7)
+    return "bg-yellow-50 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400";
+  if (support >= 0.5)
+    return "bg-orange-50 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400";
+  return "bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-400";
+}
+
 export default function FieldsTable({ fields }: FieldsTableProps) {
   const t = useTranslations();
   const fieldNames = useTranslations("fields");
@@ -54,16 +64,10 @@ export default function FieldsTable({ fields }: FieldsTableProps) {
               <td className="px-4 py-3 font-medium text-zinc-800 dark:text-zinc-200">
                 {getFieldLabel(key)}
               </td>
-              <td className="px-4 py-3 text-right text-zinc-600 dark:text-zinc-400">
-                <span className="font-mono">
-                  {(metric.avg_support * 100).toFixed(0)}%
-                </span>
-                <div className="mt-1 h-1.5 w-full min-w-16 rounded-full bg-zinc-100 dark:bg-zinc-700">
-                  <div
-                    className="h-1.5 rounded-full bg-zinc-400 dark:bg-zinc-500"
-                    style={{ width: `${metric.avg_support * 100}%` }}
-                  />
-                </div>
+              <td
+                className={`px-4 py-3 text-right font-mono font-semibold ${supportHeatClass(metric.avg_support)}`}
+              >
+                {(metric.avg_support * 100).toFixed(0)}%
               </td>
               <td className="px-4 py-3 text-right font-mono text-zinc-500 dark:text-zinc-400">
                 ±{(metric.stddev * 100).toFixed(0)}%

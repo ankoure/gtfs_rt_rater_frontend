@@ -25,8 +25,8 @@ def get_backend_source():
     source = os.environ.get("BACKEND_SOURCE", "").lower()
     if source in ("aws", "static"):
         return source
-    # Auto-detect: use AWS if credentials available, otherwise fall back to static examples
-    return "aws" if _check_aws_credentials() else "static"
+    # Auto-detect: use AWS if credentials available AND bucket is configured
+    return "aws" if (S3_BUCKET and _check_aws_credentials()) else "static"
 
 
 # Cache the result at module load time for consistency
