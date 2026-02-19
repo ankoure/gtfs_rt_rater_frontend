@@ -9,12 +9,12 @@
     {
       "Action": ["s3:ListBucket"],
       "Effect": "Allow",
-      "Resource": ["arn:aws:s3:::gtfs-rt-rater"]
+      "Resource": ["arn:aws:s3:::gtfs-rt-feeds"]
     },
     {
       "Action": ["s3:GetObject"],
       "Effect": "Allow",
-      "Resource": ["arn:aws:s3:::gtfs-rt-rater/*"]
+      "Resource": ["arn:aws:s3:::gtfs-rt-feeds/*"]
     }
   ]
 }
