@@ -16,10 +16,21 @@ function uptimeDotClass(uptime: number): string {
   return "bg-red-500";
 }
 
-export default async function FeedsList() {
+const PAGE_SIZE = 20;
+
+export default async function FeedsList({ page = 1 }: { page?: number }) {
   const locale = await getLocale();
   const t = await getTranslations("feeds");
   const { generated_at, feeds } = await getFeeds();
+
+  const sorted = [...feeds].sort((a, b) =>
+    b.overall_score - a.overall_score ||
+    (a.agency_name ?? a.feed_id).localeCompare(b.agency_name ?? b.feed_id)
+  );
+
+  const totalPages = Math.ceil(sorted.length / PAGE_SIZE);
+  const currentPage = Math.min(page, totalPages);
+  const pageFeeds = sorted.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   const generatedDate = new Date(generated_at).toLocaleString(locale, {
     dateStyle: "medium",
@@ -66,7 +77,7 @@ export default async function FeedsList() {
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
-              {feeds.map((feed) => (
+              {pageFeeds.map((feed) => (
                 <tr
                   key={feed.feed_id}
                   className="bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
@@ -108,6 +119,40 @@ export default async function FeedsList() {
             </tbody>
           </table>
         </div>
+
+        {totalPages > 1 && (
+          <div className="mt-6 flex items-center justify-between text-sm">
+            <span className="text-zinc-500 dark:text-zinc-400">
+              Page {currentPage} of {totalPages} &middot; {sorted.length} feeds
+            </span>
+            <div className="flex gap-2">
+              {currentPage > 1 ? (
+                <Link
+                  href={`/${locale}/feeds?page=${currentPage - 1}`}
+                  className="px-3 py-1.5 rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+                >
+                  ← Previous
+                </Link>
+              ) : (
+                <span className="px-3 py-1.5 rounded-md border border-zinc-100 dark:border-zinc-800 text-zinc-300 dark:text-zinc-600 cursor-not-allowed">
+                  ← Previous
+                </span>
+              )}
+              {currentPage < totalPages ? (
+                <Link
+                  href={`/${locale}/feeds?page=${currentPage + 1}`}
+                  className="px-3 py-1.5 rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+                >
+                  Next →
+                </Link>
+              ) : (
+                <span className="px-3 py-1.5 rounded-md border border-zinc-100 dark:border-zinc-800 text-zinc-300 dark:text-zinc-600 cursor-not-allowed">
+                  Next →
+                </span>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );
