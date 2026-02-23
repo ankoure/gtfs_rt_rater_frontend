@@ -71,8 +71,15 @@ export default async function FeedsList() {
                   key={feed.feed_id}
                   className="bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
                 >
-                  <td className="px-5 py-4 font-mono font-medium text-zinc-800 dark:text-zinc-200">
-                    {feed.feed_id}
+                  <td className="px-5 py-4">
+                    <span className="font-mono font-medium text-zinc-800 dark:text-zinc-200">
+                      {feed.feed_id}
+                    </span>
+                    {feed.agency_name && (
+                      <span className="block text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                        {feed.agency_name}
+                      </span>
+                    )}
                   </td>
                   <td className="px-5 py-4 text-center">
                     <GradeBadge grade={feed.overall_grade} />

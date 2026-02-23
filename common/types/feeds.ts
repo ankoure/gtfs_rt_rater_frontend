@@ -1,5 +1,6 @@
 export interface FeedSummary {
   feed_id: string;
+  agency_name?: string;
   overall_grade: string;
   overall_score: number;
   uptime_percent: number;
@@ -20,6 +21,7 @@ export interface FeedDetail {
   schema_version: number;
   algorithm_version: number;
   feed_id: string;
+  agency_name?: string;
   last_updated: string;
   window_minutes: number;
   entity_stats: {

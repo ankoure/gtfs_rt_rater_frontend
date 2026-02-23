@@ -85,9 +85,14 @@ export default async function FeedDetails({ feedId }: { feedId: string }) {
           <p className="text-xs font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
             Quality Report
           </p>
-          <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 font-mono">
-            {feed.feed_id}
+          <h1 className={`text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 ${!feed.agency_name ? "font-mono" : ""}`}>
+            {feed.agency_name ?? feed.feed_id}
           </h1>
+          {feed.agency_name && (
+            <p className="font-mono text-sm text-zinc-500 dark:text-zinc-400">
+              {feed.feed_id}
+            </p>
+          )}
           <p className="text-sm text-zinc-400 dark:text-zinc-500">
             {t("feedDetail.lastUpdated")}: {lastUpdated} &middot;{" "}
             {t("feedDetail.windowMinutes")}:{" "}
