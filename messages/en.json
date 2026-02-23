@@ -18,7 +18,7 @@
     "generatedAt": "Updated {date}",
     "back": "← Home",
     "table": {
-      "feedId": "Feed ID",
+      "feedId": "Feed",
       "grade": "Overall Grade",
       "score": "Score",
       "uptime": "Uptime"

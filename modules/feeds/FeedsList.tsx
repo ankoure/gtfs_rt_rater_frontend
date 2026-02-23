@@ -72,12 +72,12 @@ export default async function FeedsList() {
                   className="bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
                 >
                   <td className="px-5 py-4">
-                    <span className="font-mono font-medium text-zinc-800 dark:text-zinc-200">
-                      {feed.feed_id}
+                    <span className="font-medium text-zinc-800 dark:text-zinc-200">
+                      {feed.agency_name ?? feed.feed_id}
                     </span>
                     {feed.agency_name && (
-                      <span className="block text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-                        {feed.agency_name}
+                      <span className="block font-mono text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                        {feed.feed_id}
                       </span>
                     )}
                   </td>
