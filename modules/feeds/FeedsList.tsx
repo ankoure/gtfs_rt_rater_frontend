@@ -2,6 +2,7 @@ import { getTranslations, getLocale } from "next-intl/server";
 import Link from "next/link";
 import { getFeeds } from "../../common/api/feeds";
 import GradeBadge from "../../common/components/GradeBadge";
+import SearchInput from "./SearchInput";
 
 function scoreHeatClass(score: number): string {
   if (score >= 0.8) return "bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-400";
@@ -18,7 +19,7 @@ function uptimeDotClass(uptime: number): string {
 
 const PAGE_SIZE = 20;
 
-export default async function FeedsList({ page = 1 }: { page?: number }) {
+export default async function FeedsList({ page = 1, q = "" }: { page?: number; q?: string }) {
   const locale = await getLocale();
   const t = await getTranslations("feeds");
   const { generated_at, feeds } = await getFeeds();
@@ -28,9 +29,18 @@ export default async function FeedsList({ page = 1 }: { page?: number }) {
     (a.agency_name ?? a.feed_id).localeCompare(b.agency_name ?? b.feed_id)
   );
 
-  const totalPages = Math.ceil(sorted.length / PAGE_SIZE);
-  const currentPage = Math.min(page, totalPages);
-  const pageFeeds = sorted.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  const query = q.trim().toLowerCase();
+  const filtered = query
+    ? sorted.filter(
+        (f) =>
+          f.feed_id.toLowerCase().includes(query) ||
+          (f.agency_name ?? "").toLowerCase().includes(query)
+      )
+    : sorted;
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const currentPage = Math.min(page, Math.max(totalPages, 1));
+  const pageFeeds = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   const generatedDate = new Date(generated_at).toLocaleString(locale, {
     dateStyle: "medium",
@@ -57,6 +67,9 @@ export default async function FeedsList({ page = 1 }: { page?: number }) {
           <p className="mt-1 text-xs text-zinc-400 dark:text-zinc-600">
             {t("generatedAt", { date: generatedDate })}
           </p>
+          <div className="mt-4">
+            <SearchInput defaultValue={q} placeholder={t("searchPlaceholder")} />
+          </div>
         </header>
 
         <div className="overflow-x-auto rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
@@ -77,6 +90,13 @@ export default async function FeedsList({ page = 1 }: { page?: number }) {
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
+              {pageFeeds.length === 0 && (
+                <tr>
+                  <td colSpan={5} className="px-5 py-10 text-center text-sm text-zinc-400 dark:text-zinc-500">
+                    {t("noResults", { q })}
+                  </td>
+                </tr>
+              )}
               {pageFeeds.map((feed) => (
                 <tr
                   key={feed.feed_id}
@@ -123,12 +143,12 @@ export default async function FeedsList({ page = 1 }: { page?: number }) {
         {totalPages > 1 && (
           <div className="mt-6 flex items-center justify-between text-sm">
             <span className="text-zinc-500 dark:text-zinc-400">
-              Page {currentPage} of {totalPages} &middot; {sorted.length} feeds
+              Page {currentPage} of {totalPages} &middot; {filtered.length} feeds
             </span>
             <div className="flex gap-2">
               {currentPage > 1 ? (
                 <Link
-                  href={`/${locale}/feeds?page=${currentPage - 1}`}
+                  href={`/${locale}/feeds?${new URLSearchParams({ ...(q && { q }), page: String(currentPage - 1) })}`}
                   className="px-3 py-1.5 rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
                 >
                   ← Previous
@@ -140,7 +160,7 @@ export default async function FeedsList({ page = 1 }: { page?: number }) {
               )}
               {currentPage < totalPages ? (
                 <Link
-                  href={`/${locale}/feeds?page=${currentPage + 1}`}
+                  href={`/${locale}/feeds?${new URLSearchParams({ ...(q && { q }), page: String(currentPage + 1) })}`}
                   className="px-3 py-1.5 rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
                 >
                   Next →

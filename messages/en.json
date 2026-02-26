@@ -23,7 +23,9 @@
       "score": "Score",
       "uptime": "Uptime"
     },
-    "viewDetails": "View details"
+    "viewDetails": "View details",
+    "searchPlaceholder": "Search by agency or feed ID…",
+    "noResults": "No feeds match \"{q}\""
   },
   "feedDetail": {
     "back": "← All feeds",
