@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Optional
 from pydantic import BaseModel
 
 
@@ -6,8 +6,13 @@ class HealthcheckResponse(BaseModel):
     status: str
 
 
+class AgencyRefreshResponse(BaseModel):
+    updated: int
+
+
 class FeedSummary(BaseModel):
     feed_id: str
+    agency_name: Optional[str] = None
     overall_grade: str
     overall_score: float
     uptime_percent: float
@@ -38,6 +43,7 @@ class FeedDetailResponse(BaseModel):
     schema_version: int
     algorithm_version: int
     feed_id: str
+    agency_name: Optional[str] = None
     last_updated: str
     window_minutes: int
     entity_stats: EntityStats

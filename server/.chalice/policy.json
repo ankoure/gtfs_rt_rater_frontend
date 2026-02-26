@@ -15,6 +15,11 @@
       "Action": ["s3:GetObject"],
       "Effect": "Allow",
       "Resource": ["arn:aws:s3:::gtfs-rt-feeds/*"]
+    },
+    {
+      "Action": ["s3:PutObject"],
+      "Effect": "Allow",
+      "Resource": ["arn:aws:s3:::gtfs-rt-feeds/aggregates/agency_names.json"]
     }
   ]
 }

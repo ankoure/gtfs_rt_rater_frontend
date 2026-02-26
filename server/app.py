@@ -3,11 +3,17 @@
 import json
 import os
 
-from chalice import CORSConfig, NotFoundError, Response
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass  # not installed in Lambda; env vars come from Lambda configuration
+
+from chalice import CORSConfig, NotFoundError, Rate, Response, UnauthorizedError
 from chalice_spec import ChaliceWithSpec, PydanticPlugin, Docs
 from apispec import APISpec
 
-from chalicelib import config, models, s3, static_data
+from chalicelib import config, mobility_database, models, s3, static_data
 
 
 spec = APISpec(
@@ -20,8 +26,35 @@ app = ChaliceWithSpec(app_name="gtfs-rt-rater", spec=spec, generate_default_docs
 
 localhost = "localhost:3000"
 FRONTEND_HOST = os.environ.get("FRONTEND_HOST", localhost)
+ADMIN_TOKEN = os.environ.get("ADMIN_TOKEN", "")
 
 cors_config = CORSConfig(allow_origin=f"https://{FRONTEND_HOST}", max_age=3600)
+
+
+@app.schedule(Rate(24, unit=Rate.HOURS))
+def refresh_agency_names(event):
+    """Daily task: fetch agency names from MobilityDatabase and cache in S3."""
+    names = mobility_database.get_agency_names()
+    if names:
+        s3.put_agency_names(names)
+
+
+@app.route("/api/admin/refresh-agency-names", methods=["POST"], docs=Docs(response=models.AgencyRefreshResponse))
+def trigger_refresh_agency_names():
+    """Manually trigger an agency name refresh from MobilityDatabase."""
+    token = app.current_request.headers.get("x-admin-token", "")
+    if not ADMIN_TOKEN or token != ADMIN_TOKEN:
+        raise UnauthorizedError("Invalid or missing admin token")
+
+    names = mobility_database.get_agency_names()
+    if names:
+        s3.put_agency_names(names)
+
+    return Response(
+        body=json.dumps({"updated": len(names)}),
+        headers={"Content-Type": "application/json"},
+        status_code=200,
+    )
 
 
 @app.route("/api/healthcheck", cors=cors_config, docs=Docs(response=models.HealthcheckResponse))
