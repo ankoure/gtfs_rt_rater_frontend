@@ -54,7 +54,14 @@
     "current_status": "Current Status",
     "timestamp": "Timestamp",
     "congestion_level": "Congestion Level",
-    "occupancy_percentage": "Occupancy Percentage"
+    "occupancy_percentage": "Occupancy Percentage",
+    "route_id": "Route ID",
+    "trip_id": "Trip ID",
+    "vehicle_id": "Vehicle ID",
+    "vehicle_label": "Vehicle Label",
+    "license_plate": "License Plate",
+    "wheelchair_accessible": "Wheelchair Accessible",
+    "direction_id": "Direction ID"
   },
   "fieldColumns": {
     "field": "Field",
