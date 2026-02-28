@@ -1,0 +1,40 @@
+name: lint
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Set up Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check if package-lock.json is up to date
+        run: npx --yes package-lock-utd@1.1.0
+      - name: Lint frontend code with ESLint
+        run: |
+          npm ci
+          npm run lint-frontend
+
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+      - name: Install dependencies
+        run: cd server && uv sync --group dev
+      - name: Lint backend code with Ruff
+        run: cd server && uv run ruff check .
