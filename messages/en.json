@@ -36,7 +36,12 @@
     "entityStats": {
       "title": "Entity Statistics",
       "avgVehicles": "Avg. Vehicles",
-      "uptime": "Uptime"
+      "uptime": "Uptime",
+      "serviceTime": "Service Time"
+    },
+    "emptyFeed": {
+      "title": "No data available",
+      "description": "This feed reported no vehicles during the analysis window. Statistics may not be meaningful."
     },
     "fieldsBreakdown": {
       "title": "Field Support Breakdown",

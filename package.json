@@ -8,7 +8,9 @@
     "start": "next start",
     "start-python": "cd server && GTFS_RT_RATER_BUCKET=gtfs-rt-feeds uv run chalice local --port=5000",
     "start-react": "next dev",
-    "lint": "eslint"
+    "lint": "eslint",
+    "lint-frontend": "eslint",
+    "lint-backend": "cd server && uv run ruff check ."
   },
   "dependencies": {
     "@vercel/analytics": "^1.6.1",
@@ -23,8 +25,8 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "concurrently": "^9.2.1",
-    "eslint": "^10.0.0",
-    "eslint-config-next": "^0.2.4",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "^16",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

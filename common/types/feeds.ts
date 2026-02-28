@@ -27,6 +27,7 @@ export interface FeedDetail {
   entity_stats: {
     avg_vehicles: number;
     uptime_percent: number;
+    service_time_percent: number;
   };
   fields: Record<string, FieldMetric>;
   overall: {

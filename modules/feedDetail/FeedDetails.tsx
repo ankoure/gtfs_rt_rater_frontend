@@ -100,6 +100,17 @@ export default async function FeedDetails({ feedId }: { feedId: string }) {
           </p>
         </header>
 
+        {feed.entity_stats.avg_vehicles === 0 && (
+          <div className="rounded-xl border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 px-5 py-4">
+            <p className="text-sm font-semibold text-amber-800 dark:text-amber-400">
+              {t("feedDetail.emptyFeed.title")}
+            </p>
+            <p className="text-sm text-amber-700 dark:text-amber-500 mt-0.5">
+              {t("feedDetail.emptyFeed.description")}
+            </p>
+          </div>
+        )}
+
         <section className="flex flex-col sm:flex-row gap-4">
           <div className={`flex-1 rounded-xl border-l-4 ${borderColor} border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 flex flex-col items-center justify-center gap-4 shadow-sm`}>
             <p className="text-xs uppercase tracking-widest text-zinc-400 dark:text-zinc-500 font-medium self-start">
@@ -128,6 +139,14 @@ export default async function FeedDetails({ feedId }: { feedId: string }) {
                 </dt>
                 <dd className="text-2xl font-bold font-mono text-zinc-800 dark:text-zinc-200">
                   {(feed.entity_stats.uptime_percent * 100).toFixed(1)}%
+                </dd>
+              </div>
+              <div className={`pl-4 border-l-2 ${borderColor}`}>
+                <dt className="text-xs text-zinc-500 dark:text-zinc-400 mb-0.5">
+                  {t("feedDetail.entityStats.serviceTime")}
+                </dt>
+                <dd className="text-2xl font-bold font-mono text-zinc-800 dark:text-zinc-200">
+                  {(feed.entity_stats.service_time_percent * 100).toFixed(1)}%
                 </dd>
               </div>
             </dl>
